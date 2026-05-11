@@ -29,4 +29,17 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+    public function invoices(){
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function subscription(){
+        return $this->hasOne(Subscription::class);
+    }
+
+    public function clients(){
+        return $this->hasMany(Client::class) ;
+    }
 }
