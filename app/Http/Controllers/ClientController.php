@@ -14,6 +14,7 @@ class ClientController extends Controller
     public function index(){
 
         $client=Client::where('user_id', auth()->id())->get();
+        // dd($client);
         return view('clients.index', compact('client')) ;
     }
 
@@ -52,23 +53,37 @@ class ClientController extends Controller
     }
 
     public function show(Client $client){
-        return ;
+     return view('clients.show' , compact('client')) ;
+
+
 
     }
 
     public function edit(Client $client){
-        return ;
+         return view('clients.edit' , compact('client'));
 
     }
 
     public function update(Request $req ,Client $client){
-        return ;
 
+       $client->update([
+          'client_name' => $req->client_name ,
+          'email'  => $req->email,
+          'phone' =>$req->phone,
+          'address' =>$req->client_address,
+          'city' => $req->city,
+          'country' => $req->country
+             
+        ]);
+        return  redirect()->route('clients.index')  ;
+       
     }
 
 
     public function destroy(Client $client){
-        return ;
+       $client->delete('id');
+
+       return redirect()->route('clients.index');
 
     }
 
