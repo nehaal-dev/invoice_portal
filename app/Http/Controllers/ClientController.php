@@ -55,8 +55,6 @@ class ClientController extends Controller
     public function show(Client $client){
      return view('clients.show' , compact('client')) ;
 
-
-
     }
 
     public function edit(Client $client){

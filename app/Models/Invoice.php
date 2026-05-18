@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
-   protected $fillable=[
+    protected $fillable = [
         'user_id',
         'client_id',
-        'invoice_numnber',
+        'invoice_number',  // ← yeh missing hai
         'invoice_date',
         'due_date',
         'status',
@@ -18,10 +18,8 @@ class Invoice extends Model
         'tax',
         'discount',
         'total',
-        'note'
-
+        'notes',
     ];
-
 
 
 
