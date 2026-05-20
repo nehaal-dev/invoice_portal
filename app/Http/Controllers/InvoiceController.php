@@ -6,13 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\Invoice;
 use App\Models\Client;
 use App\Models\InvoiceItem;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class InvoiceController extends Controller
 {
 
-    public function index() {
-        $invoices=Invoice::where('user_id' , auth()->id())->get();
-        return view('invoices.index' , compact('invoices'));
+    public function index()
+    {
+        $invoices = Invoice::where('user_id', auth()->id())->get();
+        return view('invoices.index', compact('invoices'));
     }
 
 
@@ -23,9 +25,9 @@ class InvoiceController extends Controller
     }
 
 
- public function store(Request $request)
+    public function store(Request $request)
     {
-// dd($request->all());
+        // dd($request->all());
         $request->validate([
             'invoice_date' => 'date|nullable',
             'due_date'  => 'date|nullable',
@@ -38,90 +40,109 @@ class InvoiceController extends Controller
 
         ]);
 
-$sub_total=0;
- foreach( $request->item_name  as $index=>$name){
+        $sub_total = 0;
+        foreach ($request->item_name  as $index => $name) {
 
-    $sub_total += $request->quantity[$index] * $request->price[$index] ;
- }
- $total=$sub_total + ( $sub_total * $request->tax/100) - $request->discount ;
+            $sub_total += $request->quantity[$index] * $request->price[$index];
+        }
+        $total = $sub_total + ($sub_total * $request->tax / 100) - $request->discount;
 
-        $invoice=Invoice::create([
-            'user_id' =>auth()->id(),
+        $invoice = Invoice::create([
+            'user_id' => auth()->id(),
             'client_id' => $request->client_id,
-            'invoice_number'  => 'INV-'.str_pad(Invoice::count() +1 ,3,'0' ,STR_PAD_LEFT ) ,
+            'invoice_number'  => 'INV-' . str_pad(Invoice::count() + 1, 3, '0', STR_PAD_LEFT),
             'invoice_date' => $request->invoice_date,
             'due_date' => $request->due_date,
-            'subtotal'=>$sub_total,
-            'total' =>$total,
+            'subtotal' => $sub_total,
+            'total' => $total,
             'tax' => $request->tax,
             'discount' => $request->discount,
             'notes' => $request->notes
 
         ]);
- 
 
-            foreach($request->item_name as $index=>$item_name){
-                InvoiceItem::create([
-                    'invoice_id' =>$invoice->id,
-                    'item_name' => $item_name,
-                    'quantity' => $request->quantity[$index],
-                    'price' => $request->price[$index],
-                    'total' => $request->price[$index]*$request->quantity[$index]
 
-                ]);
-            } 
-            return redirect()->route('invoices.index'); 
+        foreach ($request->item_name as $index => $item_name) {
+            InvoiceItem::create([
+                'invoice_id' => $invoice->id,
+                'item_name' => $item_name,
+                'quantity' => $request->quantity[$index],
+                'price' => $request->price[$index],
+                'total' => $request->price[$index] * $request->quantity[$index]
+
+            ]);
+        }
+        return redirect()->route('invoices.index');
     }
 
 
-    public function show(Invoice $invoice ) {
-        $items=InvoiceItem::where('invoice_id' ,$invoice->id )->get();
-       return view('invoices.show' , compact('invoice' , 'items'))  ;
+    public function show(Invoice $invoice)
+    {
+        $items = InvoiceItem::where('invoice_id', $invoice->id)->get();
+        return view('invoices.show', compact('invoice', 'items'));
     }
 
 
-    public function edit(Invoice $invoice) {
-        $clients=Client::where('user_id' , auth()->id() )->get();
-        $items=InvoiceItem::where('invoice_id' , $invoice->id )->get() ;
-   
-       return view('invoices.edit' , compact('invoice','clients','items'));
-         
+    public function edit(Invoice $invoice)
+    {
+        $clients = Client::where('user_id', auth()->id())->get();
+        $items = InvoiceItem::where('invoice_id', $invoice->id)->get();
+
+        return view('invoices.edit', compact('invoice', 'clients', 'items'));
     }
 
 
 
-    public function update(Request $request, Invoice $invoice) {
+    public function update(Request $request, Invoice $invoice)
+    {
 
         $invoice->update([
 
             'invoice_date' => $request->invoice_date,
             'due_date' => $request->due_date,
             'tax' => $request->tax,
-            'discount' =>$request->discount,
-            'notes'=>$request->notes
+            'discount' => $request->discount,
+            'notes' => $request->notes
         ]);
 
-        $invoice->items()->delete() ;
-       foreach($request->item_name as $index=>$item_name ){
+        $invoice->items()->delete();
+        foreach ($request->item_name as $index => $item_name) {
 
-        InvoiceItem::create([
-            'invoice_id' => $invoice->id,
-            'item_name' => $item_name,
-            'quantity' => $request->quantity[$index],
-            'price'  =>$request->price[$index],
-            'total' =>$request->quantity[$index]*$request->price[$index]
-        ]);
-       }
+            InvoiceItem::create([
+                'invoice_id' => $invoice->id,
+                'item_name' => $item_name,
+                'quantity' => $request->quantity[$index],
+                'price'  => $request->price[$index],
+                'total' => $request->quantity[$index] * $request->price[$index]
+            ]);
+        }
 
- 
-      
+
+
         return redirect()->route('invoices.index');
     }
 
 
-    public function destroy(Invoice $invoice) {
+    public function destroy(Invoice $invoice)
+    {
         //$invoice->delete(); ye bhi sahi h
         Invoice::destroy($invoice->id);
         return redirect()->route('invoices.index');
+    }
+
+
+
+
+
+
+    public function downloadPdf(Invoice $invoice)
+    {
+        $items=InvoiceItem::where('invoice_id' , $invoice->id)->get();
+        $clint=Client::find($invoice->client_id );
+        $pdf = Pdf::loadView('invoices.pdf', compact('invoice', 'items' ,'clint'));
+        return $pdf->download('Invoice-' . $invoice->invoice_number . '.pdf');
+       // return $pdf->stream('Invoice-' . $invoice->invoice_number . '.pdf'); for testing in browser use stream()
+
+  
     }
 }

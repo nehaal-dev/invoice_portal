@@ -3,6 +3,7 @@
         <title>  </title>
     </head>
     <body>
+        <a href="{{ route('invoices.pdf', $invoice->id) }}"><button>Download PDF </button> </a>
 <ul> 
     <li> Invoice  Id : {{$invoice->id}}</li>
     <li>   User Id : {{$invoice->user_id}}</li>
