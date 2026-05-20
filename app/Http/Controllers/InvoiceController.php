@@ -10,7 +10,10 @@ use App\Models\InvoiceItem;
 class InvoiceController extends Controller
 {
 
-    public function index() {}
+    public function index() {
+        $invoices=Invoice::where('user_id' , auth()->id())->get();
+        return view('invoices.index' , compact('invoices'));
+    }
 
 
     public function create()
@@ -20,7 +23,7 @@ class InvoiceController extends Controller
     }
 
 
-    public function store(Request $request)
+ public function store(Request $request)
     {
 // dd($request->all());
         $request->validate([
@@ -35,12 +38,21 @@ class InvoiceController extends Controller
 
         ]);
 
+$sub_total=0;
+ foreach( $request->item_name  as $index=>$name){
+
+    $sub_total += $request->quantity[$index] * $request->price[$index] ;
+ }
+ $total=$sub_total + ( $sub_total * $request->tax/100) - $request->discount ;
+
         $invoice=Invoice::create([
             'user_id' =>auth()->id(),
             'client_id' => $request->client_id,
             'invoice_number'  => 'INV-'.str_pad(Invoice::count() +1 ,3,'0' ,STR_PAD_LEFT ) ,
             'invoice_date' => $request->invoice_date,
             'due_date' => $request->due_date,
+            'subtotal'=>$sub_total,
+            'total' =>$total,
             'tax' => $request->tax,
             'discount' => $request->discount,
             'notes' => $request->notes
@@ -62,14 +74,54 @@ class InvoiceController extends Controller
     }
 
 
-    public function show(Invoice $invoice) {}
+    public function show(Invoice $invoice ) {
+        $items=InvoiceItem::where('invoice_id' ,$invoice->id )->get();
+       return view('invoices.show' , compact('invoice' , 'items'))  ;
+    }
 
 
-    public function edit(Invoice $invoice) {}
+    public function edit(Invoice $invoice) {
+        $clients=Client::where('user_id' , auth()->id() )->get();
+        $items=InvoiceItem::where('invoice_id' , $invoice->id )->get() ;
+   
+       return view('invoices.edit' , compact('invoice','clients','items'));
+         
+    }
 
 
-    public function update(Request $request, Invoice $invoice) {}
+
+    public function update(Request $request, Invoice $invoice) {
+
+        $invoice->update([
+
+            'invoice_date' => $request->invoice_date,
+            'due_date' => $request->due_date,
+            'tax' => $request->tax,
+            'discount' =>$request->discount,
+            'notes'=>$request->notes
+        ]);
+
+        $invoice->items()->delete() ;
+       foreach($request->item_name as $index=>$item_name ){
+
+        InvoiceItem::create([
+            'invoice_id' => $invoice->id,
+            'item_name' => $item_name,
+            'quantity' => $request->quantity[$index],
+            'price'  =>$request->price[$index],
+            'total' =>$request->quantity[$index]*$request->price[$index]
+        ]);
+       }
+
+ 
+      
+        return redirect()->route('invoices.index');
+    }
 
 
-    public function destroy(Invoice $invoice) {}
+    public function destroy(Invoice $invoice) {
+        //$invoice->delete(); ye bhi sahi h
+        Invoice::destroy($invoice->id);
+        return redirect()->route('invoices.index');
+    }
 }

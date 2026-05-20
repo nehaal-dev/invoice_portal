@@ -10,7 +10,7 @@ class Invoice extends Model
     protected $fillable = [
         'user_id',
         'client_id',
-        'invoice_number',  // ← yeh missing hai
+        'invoice_number',  // ←  this is  missing 
         'invoice_date',
         'due_date',
         'status',
