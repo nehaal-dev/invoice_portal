@@ -50,9 +50,10 @@ class InvoiceController extends Controller
         $invoice = Invoice::create([
             'user_id' => auth()->id(),
             'client_id' => $request->client_id,
-            'invoice_number'  => 'INV-' . str_pad(Invoice::count() + 1, 3, '0', STR_PAD_LEFT),
+            'invoice_number'  => 'INV-' . str_pad(Invoice::max('id') + 1, 3, '0', STR_PAD_LEFT),
             'invoice_date' => $request->invoice_date,
             'due_date' => $request->due_date,
+            'status' => $request->status,  //add here status
             'subtotal' => $sub_total,
             'total' => $total,
             'tax' => $request->tax,
@@ -100,6 +101,7 @@ class InvoiceController extends Controller
 
             'invoice_date' => $request->invoice_date,
             'due_date' => $request->due_date,
+            'status' => $request->status, // add here status
             'tax' => $request->tax,
             'discount' => $request->discount,
             'notes' => $request->notes
