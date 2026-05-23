@@ -4,9 +4,10 @@
             <h2 class="font-semibold text-xl text-gray-800">Invoice {{ $invoice->invoice_number }}</h2>
             <div class="flex gap-2">
                 <a href="{{ route('invoices.pdf', $invoice->id) }}"
-                   class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700">
-                    Download PDF
-                </a>
+                    target="_blank"
+                    class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700">
+                     Download PDF
+                 </a>
                 <a href="{{ route('invoices.edit', $invoice->id) }}"
                    class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">
                     Edit
