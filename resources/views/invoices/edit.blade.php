@@ -53,7 +53,7 @@
                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Discount</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Discount (₹):</label>
                             <input type="number" name="discount" value="{{ $invoice->discount }}"
                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>

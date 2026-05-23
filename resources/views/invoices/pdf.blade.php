@@ -68,7 +68,7 @@
             <td>{{ number_format($invoice->subtotal * $invoice->tax / 100, 2) }}</td>
         </tr>
         <tr class="summary">
-            <td colspan="3" style="text-align: right;"><strong>Discount % :</strong></td>
+            <td colspan="3" style="text-align: right;"><strong>Discount (₹):</strong></td>
             <td>{{ $invoice->discount }}</td>
         </tr>
         <tr class="total-row">
