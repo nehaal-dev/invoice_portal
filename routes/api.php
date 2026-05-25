@@ -17,3 +17,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/clients', [ClientApiController::class, 'store']);
 
 });
+
+Route::post('/login' , function(Request $request){
+    $credential=$request->only('email', 'password');
+
+    if(!auth()->attempt($credential)){
+        return response()->json(['message' => 'Authentication Failed'] , 401) ;
+
+    } 
+$token=auth()->user()->createToken('api-token')->plainTextToken;
+
+return response()->json(['token'=>$token]) ;
+
+});
