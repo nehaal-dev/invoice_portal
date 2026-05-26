@@ -29,6 +29,10 @@ Route::post('/login', function(Request $request) {
     }
     
     $user = auth()->user();
+    
+    // Purane tokens delete karo
+    $user->tokens()->delete();
+    
     $token = $user->createToken('api-token')->plainTextToken;
     
     return response()->json(['token' => $token]);
