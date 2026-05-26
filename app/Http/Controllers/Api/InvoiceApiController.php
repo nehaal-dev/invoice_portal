@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use APP\Models\Invoice;
+use App\Models\Invoice;
 
 class InvoiceApiController extends Controller
 {
