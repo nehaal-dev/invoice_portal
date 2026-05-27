@@ -48,4 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/invoices/{invoice}/pdf' , [InvoiceController::class , 'downloadPdf'])->name('invoices.pdf');
 });
 
+Route::get('/invoices/{invoice}/checkout', [InvoiceController::class, 'checkout'])->name('invoices.checkout');
+Route::get('/invoices/{invoice}/payment-success', [InvoiceController::class, 'paymentSuccess'])->name('invoices.payment.success');
+
+
 require __DIR__ . '/auth.php';

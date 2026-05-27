@@ -3,17 +3,23 @@
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800">Invoice {{ $invoice->invoice_number }}</h2>
             <div class="flex gap-2">
-                <a href="{{ route('invoices.pdf', $invoice->id) }}"
-                    target="_blank"
+                <a href="{{ route('invoices.pdf', $invoice->id) }}" target="_blank"
                     class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700">
-                     Download PDF
-                 </a>
+                    Download PDF
+                </a>
                 <a href="{{ route('invoices.edit', $invoice->id) }}"
-                   class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">
                     Edit
                 </a>
+                {{-- payment tab --}}
+                @if ($invoice->status !== 'paid')
+                    <a href="{{ route('invoices.checkout', $invoice->id) }}"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">
+                        Pay Now
+                    </a>
+                @endif
                 <a href="{{ route('invoices.index') }}"
-                   class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-200">
+                    class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-200">
                     Back
                 </a>
             </div>
@@ -48,7 +54,8 @@
                         </div>
                         <div class="flex justify-between border-b pb-2">
                             <span class="text-sm text-gray-500">Status</span>
-                            <span class="px-2 py-1 rounded-full text-xs font-medium
+                            <span
+                                class="px-2 py-1 rounded-full text-xs font-medium
                                 {{ $invoice->status == 'paid' ? 'bg-green-100 text-green-700' : '' }}
                                 {{ $invoice->status == 'unpaid' ? 'bg-red-100 text-red-700' : '' }}
                                 {{ $invoice->status == 'draft' ? 'bg-gray-100 text-gray-700' : '' }}
@@ -77,13 +84,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($items as $item)
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="px-4 py-3">{{ $item->item_name }}</td>
-                            <td class="px-4 py-3">{{ $item->quantity }}</td>
-                            <td class="px-4 py-3">₹{{ number_format($item->price, 2) }}</td>
-                            <td class="px-4 py-3">₹{{ number_format($item->total, 2) }}</td>
-                        </tr>
+                        @foreach ($items as $item)
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="px-4 py-3">{{ $item->item_name }}</td>
+                                <td class="px-4 py-3">{{ $item->quantity }}</td>
+                                <td class="px-4 py-3">₹{{ number_format($item->price, 2) }}</td>
+                                <td class="px-4 py-3">₹{{ number_format($item->total, 2) }}</td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -96,7 +103,7 @@
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-500">Tax ({{ $invoice->tax }}%)</span>
-                        <span>₹{{ number_format($invoice->subtotal * $invoice->tax / 100, 2) }}</span>
+                        <span>₹{{ number_format(($invoice->subtotal * $invoice->tax) / 100, 2) }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-500">Discount</span>
