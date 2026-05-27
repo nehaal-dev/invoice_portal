@@ -153,7 +153,7 @@ class InvoiceController extends Controller
         return $pdf->download('Invoice-' . $invoice->invoice_number . '.pdf');
         // return $pdf->stream('Invoice-' . $invoice->invoice_number . '.pdf'); for testing in browser use stream()
     }
-    
+
 
 
     public function checkout(Invoice $invoice)
@@ -202,22 +202,55 @@ class InvoiceController extends Controller
     // }
 
 
+    // public function paymentSuccess(Invoice $invoice, Request $request)
+    // {
+    //     Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    //     $session = Session::retrieve($request->session_id);
+
+    //     if ($session && $session->payment_status == 'paid') {
+
+    //         $invoice->update([
+    //             'status' => 'paid'
+    //         ]);
+
+    //         // prevent duplicate payment entries
+    //         $paymentExists = Payment::where('transaction_id', $session->payment_intent)->exists();
+
+    //         if (!$paymentExists) {
+
+    //             Payment::create([
+    //                 'invoice_id'     => $invoice->id,
+    //                 'amount'         => $invoice->total,
+    //                 'payment_date'   => now(),
+    //                 'payment_method' => 'stripe',
+    //                 'transaction_id' => $session->payment_intent,
+    //             ]);
+    //         }
+
+    //         return redirect()
+    //             ->route('invoices.show', $invoice->id)
+    //             ->with('success', 'Payment completed successfully.');
+    //     }
+
+    //     return redirect()
+    //         ->route('invoices.show', $invoice->id)
+    //         ->with('error', 'Payment verification failed.');
+    // }
     public function paymentSuccess(Invoice $invoice, Request $request)
     {
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $session = Session::retrieve($request->session_id);
 
-        if ($session && $session->payment_status == 'paid') {
+        if ($session->payment_status === 'paid') {
 
-            $invoice->update([
-                'status' => 'paid'
-            ]);
+            $existingPayment = Payment::where(
+                'transaction_id',
+                $session->payment_intent
+            )->first();
 
-            // prevent duplicate payment entries
-            $paymentExists = Payment::where('transaction_id', $session->payment_intent)->exists();
-
-            if (!$paymentExists) {
+            if (!$existingPayment) {
 
                 Payment::create([
                     'invoice_id'     => $invoice->id,
@@ -226,15 +259,19 @@ class InvoiceController extends Controller
                     'payment_method' => 'stripe',
                     'transaction_id' => $session->payment_intent,
                 ]);
+
+                $invoice->update([
+                    'status' => 'paid'
+                ]);
             }
 
             return redirect()
                 ->route('invoices.show', $invoice->id)
-                ->with('success', 'Payment completed successfully.');
+                ->with('success', 'Payment completed successfully!');
         }
 
         return redirect()
             ->route('invoices.show', $invoice->id)
-            ->with('error', 'Payment verification failed.');
+            ->with('error', 'Payment failed!');
     }
 }
