@@ -67,6 +67,16 @@
                             <span class="text-sm text-gray-500">Notes</span>
                             <span class="text-sm">{{ $invoice->notes }}</span>
                         </div>
+                        {{-- transaction id show --}}
+                        @if ($invoice->payment)
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-sm text-gray-500">Transaction ID</span>
+
+                                <span class="text-sm text-green-600 break-all">
+                                    {{ $invoice->payment->transaction_id }}
+                                </span>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -96,7 +106,7 @@
                 </table>
 
                 <!-- Summary -->
-                <div class="p-4 space-y-2 border-t">
+                {{-- <div class="p-4 space-y-2 border-t">
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-500">Subtotal</span>
                         <span>₹{{ number_format($invoice->subtotal, 2) }}</span>
@@ -113,7 +123,82 @@
                         <span>Total</span>
                         <span class="text-green-600">₹{{ number_format($invoice->total, 2) }}</span>
                     </div>
+                </div> --}}
+                <!-- Summary -->
+                <div class="p-4 space-y-2 border-t">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Subtotal</span>
+                        <span>₹{{ number_format($invoice->subtotal, 2) }}</span>
+                    </div>
+
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Tax ({{ $invoice->tax }}%)</span>
+
+                        <span>
+                            ₹{{ number_format(($invoice->subtotal * $invoice->tax) / 100, 2) }}
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Discount</span>
+                        <span>-₹{{ number_format($invoice->discount, 2) }}</span>
+                    </div>
+
+                    <div class="flex justify-between font-bold text-base border-t pt-2">
+                        <span>Total</span>
+
+                        <span class="text-green-600">
+                            ₹{{ number_format($invoice->total, 2) }}
+                        </span>
+                    </div>
                 </div>
+
+                @if ($invoice->payment)
+                    <div class="border-t p-4 bg-gray-50">
+
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase mb-4">
+                            Payment History
+                        </h3>
+
+                        <div class="space-y-3">
+
+                            <div class="flex justify-between text-sm border-b pb-2">
+                                <span class="text-gray-500">Payment Method</span>
+
+                                <span class="font-medium">
+                                    {{ ucfirst($invoice->payment->payment_method) }}
+                                </span>
+                            </div>
+
+                            <div class="flex justify-between text-sm border-b pb-2">
+                                <span class="text-gray-500">Amount Paid</span>
+
+                                <span class="text-green-600 font-semibold">
+                                    ₹{{ number_format($invoice->payment->amount, 2) }}
+                                </span>
+                            </div>
+
+                            <div class="flex justify-between text-sm border-b pb-2">
+                                <span class="text-gray-500">Payment Date</span>
+
+                                <span>
+                                    {{ $invoice->payment->payment_date }}
+                                </span>
+                            </div>
+
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Transaction ID</span>
+
+                                <span class="break-all text-xs">
+                                    {{ $invoice->payment->transaction_id }}
+                                </span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                @endif
+
 
             </div>
         </div>

@@ -84,6 +84,7 @@ class InvoiceController extends Controller
 
     public function show(Invoice $invoice)
     {
+        $invoice->load('payment');
         $items = InvoiceItem::where('invoice_id', $invoice->id)->get();
         return view('invoices.show', compact('invoice', 'items'));
     }
@@ -144,60 +145,96 @@ class InvoiceController extends Controller
 
     public function downloadPdf(Invoice $invoice)
     {
-        $items=InvoiceItem::where('invoice_id' , $invoice->id)->get();
-        $clint=Client::find($invoice->client_id );
-        $pdf = Pdf::loadView('invoices.pdf', compact('invoice', 'items' ,'clint'));
+        $invoice->load('payment');
+
+        $items = InvoiceItem::where('invoice_id', $invoice->id)->get();
+        $clint = Client::find($invoice->client_id);
+        $pdf = Pdf::loadView('invoices.pdf', compact('invoice', 'items', 'clint'));
         return $pdf->download('Invoice-' . $invoice->invoice_number . '.pdf');
-       // return $pdf->stream('Invoice-' . $invoice->invoice_number . '.pdf'); for testing in browser use stream()
-
-  
+        // return $pdf->stream('Invoice-' . $invoice->invoice_number . '.pdf'); for testing in browser use stream()
     }
-
-
+    
 
 
     public function checkout(Invoice $invoice)
-{
-    Stripe::setApiKey(env('STRIPE_SECRET'));
+    {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
 
-    $session = Session::create([
-        'payment_method_types' => ['card'],
-        'line_items' => [[
-            'price_data' => [
-                'currency' => 'inr',
-                'product_data' => [
-                    'name' => 'Invoice ' . $invoice->invoice_number,
+        $session = Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'inr',
+                    'product_data' => [
+                        'name' => 'Invoice ' . $invoice->invoice_number,
+                    ],
+                    'unit_amount' => $invoice->total * 100,
                 ],
-                'unit_amount' => $invoice->total * 100,
-            ],
-            'quantity' => 1,
-        ]],
-        'mode' => 'payment',
-        'success_url' => route('invoices.payment.success', $invoice->id) . '?session_id={CHECKOUT_SESSION_ID}',
-        'cancel_url' => route('invoices.show', $invoice->id),
-    ]);
-
-    return redirect($session->url);
-}
-
-public function paymentSuccess(Invoice $invoice, Request $request)
-{
-    Stripe::setApiKey(env('STRIPE_SECRET'));
-
-    $session = Session::retrieve($request->session_id);
-
-    if ($session->payment_status === 'paid') {
-        $invoice->update(['status' => 'paid']);
-
-        Payment::create([
-            'invoice_id'     => $invoice->id,
-            'amount'         => $invoice->total,
-            'payment_date'   => now(),
-            'payment_method' => 'stripe',
-            'transaction_id' => $session->payment_intent,
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => route('invoices.payment.success', $invoice->id) . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('invoices.show', $invoice->id),
         ]);
+
+        return redirect($session->url);
     }
 
-    return redirect()->route('invoices.show', $invoice->id);
-}
+    // public function paymentSuccess(Invoice $invoice, Request $request)
+    // {
+    //     Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    //     $session = Session::retrieve($request->session_id);
+
+    //     if ($session->payment_status === 'paid') {
+    //         $invoice->update(['status' => 'paid']);
+
+    //         Payment::create([
+    //             'invoice_id'     => $invoice->id,
+    //             'amount'         => $invoice->total,
+    //             'payment_date'   => now(),
+    //             'payment_method' => 'stripe',
+    //             'transaction_id' => $session->payment_intent,
+    //         ]);
+    //     }
+
+    //     return redirect()->route('invoices.show', $invoice->id);
+    // }
+
+
+    public function paymentSuccess(Invoice $invoice, Request $request)
+    {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $session = Session::retrieve($request->session_id);
+
+        if ($session && $session->payment_status == 'paid') {
+
+            $invoice->update([
+                'status' => 'paid'
+            ]);
+
+            // prevent duplicate payment entries
+            $paymentExists = Payment::where('transaction_id', $session->payment_intent)->exists();
+
+            if (!$paymentExists) {
+
+                Payment::create([
+                    'invoice_id'     => $invoice->id,
+                    'amount'         => $invoice->total,
+                    'payment_date'   => now(),
+                    'payment_method' => 'stripe',
+                    'transaction_id' => $session->payment_intent,
+                ]);
+            }
+
+            return redirect()
+                ->route('invoices.show', $invoice->id)
+                ->with('success', 'Payment completed successfully.');
+        }
+
+        return redirect()
+            ->route('invoices.show', $invoice->id)
+            ->with('error', 'Payment verification failed.');
+    }
 }
