@@ -180,63 +180,7 @@ class InvoiceController extends Controller
         return redirect($session->url);
     }
 
-    // public function paymentSuccess(Invoice $invoice, Request $request)
-    // {
-    //     Stripe::setApiKey(env('STRIPE_SECRET'));
-
-    //     $session = Session::retrieve($request->session_id);
-
-    //     if ($session->payment_status === 'paid') {
-    //         $invoice->update(['status' => 'paid']);
-
-    //         Payment::create([
-    //             'invoice_id'     => $invoice->id,
-    //             'amount'         => $invoice->total,
-    //             'payment_date'   => now(),
-    //             'payment_method' => 'stripe',
-    //             'transaction_id' => $session->payment_intent,
-    //         ]);
-    //     }
-
-    //     return redirect()->route('invoices.show', $invoice->id);
-    // }
-
-
-    // public function paymentSuccess(Invoice $invoice, Request $request)
-    // {
-    //     Stripe::setApiKey(env('STRIPE_SECRET'));
-
-    //     $session = Session::retrieve($request->session_id);
-
-    //     if ($session && $session->payment_status == 'paid') {
-
-    //         $invoice->update([
-    //             'status' => 'paid'
-    //         ]);
-
-    //         // prevent duplicate payment entries
-    //         $paymentExists = Payment::where('transaction_id', $session->payment_intent)->exists();
-
-    //         if (!$paymentExists) {
-
-    //             Payment::create([
-    //                 'invoice_id'     => $invoice->id,
-    //                 'amount'         => $invoice->total,
-    //                 'payment_date'   => now(),
-    //                 'payment_method' => 'stripe',
-    //                 'transaction_id' => $session->payment_intent,
-    //             ]);
-    //         }
-
-    //         return redirect()
-    //             ->route('invoices.show', $invoice->id)
-    //             ->with('success', 'Payment completed successfully.');
-    //     }
-
-    //     return redirect()
-    //         ->route('invoices.show', $invoice->id)
-    //         ->with('error', 'Payment verification failed.');
-    // }
+    
     public function paymentSuccess(Invoice $invoice, Request $request)
     {
         Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -252,13 +196,15 @@ class InvoiceController extends Controller
 
             if (!$existingPayment) {
 
-                Payment::create([
+                $payment=Payment::create([
                     'invoice_id'     => $invoice->id,
                     'amount'         => $invoice->total,
                     'payment_date'   => now(),
                     'payment_method' => 'stripe',
                     'transaction_id' => $session->payment_intent,
                 ]);
+
+                //dd($payment);
 
                 $invoice->update([
                     'status' => 'paid'
