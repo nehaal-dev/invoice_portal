@@ -14,7 +14,7 @@
                 {{-- payment tab --}}
                 @if ($invoice->status !== 'paid')
                     <a href="{{ route('invoices.checkout', $invoice->id) }}"
-                        class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">
+                        class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700">
                         Pay Now
                     </a>
                 @endif

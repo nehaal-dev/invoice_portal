@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Invoice;
+
+
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
+use App\Models\Payment;
 
 class InvoiceApiController extends Controller
 {
@@ -51,7 +54,8 @@ class InvoiceApiController extends Controller
  
  
 
-public function checkout(Invoice $invoice)
+
+    public function checkout(Invoice $invoice)
 {
     Stripe::setApiKey(env('STRIPE_SECRET'));
 
@@ -82,7 +86,6 @@ public function paymentSuccess(Invoice $invoice, Request $request)
     $session = Session::retrieve($request->session_id);
 
     if ($session->payment_status === 'paid') {
-        
         $invoice->update(['status' => 'paid']);
 
         Payment::create([
@@ -96,6 +99,5 @@ public function paymentSuccess(Invoice $invoice, Request $request)
 
     return redirect()->route('invoices.show', $invoice->id);
 }
-
 
 }
