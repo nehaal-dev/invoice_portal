@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Invoice;
 
 
-use Stripe\Stripe;
-use Stripe\Checkout\Session;
-use App\Models\Payment;
+
 
 class InvoiceApiController extends Controller
 {
@@ -55,49 +53,5 @@ class InvoiceApiController extends Controller
  
 
 
-    public function checkout(Invoice $invoice)
-{
-    Stripe::setApiKey(env('STRIPE_SECRET'));
-
-    $session = Session::create([
-        'payment_method_types' => ['card'],
-        'line_items' => [[
-            'price_data' => [
-                'currency' => 'inr',
-                'product_data' => [
-                    'name' => 'Invoice ' . $invoice->invoice_number,
-                ],
-                'unit_amount' => $invoice->total * 100,
-            ],
-            'quantity' => 1,
-        ]],
-        'mode' => 'payment',
-        'success_url' => route('invoices.payment.success', $invoice->id) . '?session_id={CHECKOUT_SESSION_ID}',
-        'cancel_url' => route('invoices.show', $invoice->id),
-    ]);
-
-    return redirect($session->url);
-}
-
-public function paymentSuccess(Invoice $invoice, Request $request)
-{
-    Stripe::setApiKey(env('STRIPE_SECRET'));
-
-    $session = Session::retrieve($request->session_id);
-
-    if ($session->payment_status === 'paid') {
-        $invoice->update(['status' => 'paid']);
-
-        Payment::create([
-            'invoice_id'     => $invoice->id,
-            'amount'         => $invoice->total,
-            'payment_date'   => now(),
-            'payment_method' => 'stripe',
-            'transaction_id' => $session->payment_intent,
-        ]);
-    }
-
-    return redirect()->route('invoices.show', $invoice->id);
-}
 
 }
