@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
- 
+
 
 class Invoice extends Model
 {
@@ -26,19 +26,26 @@ class Invoice extends Model
 
 
 
-    public function items(){
-    return $this->hasMany(InvoiceItem::class);
-    }  
-    
-    public function payments(){
-        return $this->hasMany(Payment::class);
+    public function items()
+    {
+        return $this->hasMany(InvoiceItem::class);
     }
 
-    public function user(){
+    // public function payments(){
+    //     return $this->hasMany(Payment::class);
+    // }
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function client(){
+    public function client()
+    {
         return $this->belongsTo(Client::class);
     }
 }
