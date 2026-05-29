@@ -11,6 +11,11 @@
                     class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">
                     Edit
                 </a>
+                {{-- email send --}}
+                <a href="{{ route('invoices.send.email', $invoice->id) }}"
+                    class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-purple-700">
+                    Send Email
+                </a>
                 {{-- payment tab --}}
                 @if ($invoice->status !== 'paid')
                     <a href="{{ route('invoices.checkout', $invoice->id) }}"

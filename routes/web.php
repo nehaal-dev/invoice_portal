@@ -51,4 +51,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/invoices/{invoice}/checkout', [InvoiceController::class, 'checkout'])->name('invoices.checkout');
 Route::get('/invoices/{invoice}/payment-success', [InvoiceController::class, 'paymentSuccess'])->name('invoices.payment.success');
 
+
+Route::get('/invoices/{invoice}/send-email',[InvoiceController::class, 'sendEmail'])->name('invoices.send.email');
+
 require __DIR__ . '/auth.php';

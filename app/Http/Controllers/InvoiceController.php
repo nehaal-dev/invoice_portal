@@ -12,6 +12,9 @@ use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use App\Models\Payment;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InvoiceMail;
+
 
 class InvoiceController extends Controller
 {
@@ -180,7 +183,7 @@ class InvoiceController extends Controller
         return redirect($session->url);
     }
 
-    
+
     public function paymentSuccess(Invoice $invoice, Request $request)
     {
         Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -196,7 +199,7 @@ class InvoiceController extends Controller
 
             if (!$existingPayment) {
 
-                $payment=Payment::create([
+                $payment = Payment::create([
                     'invoice_id'     => $invoice->id,
                     'amount'         => $invoice->total,
                     'payment_date'   => now(),
@@ -219,5 +222,16 @@ class InvoiceController extends Controller
         return redirect()
             ->route('invoices.show', $invoice->id)
             ->with('error', 'Payment failed!');
+    }
+
+
+    public function sendEmail(Invoice $invoice)
+    {
+        Mail::to($invoice->client->email)
+            ->send(new InvoiceMail($invoice));
+
+        return redirect()
+            ->route('invoices.show', $invoice->id)
+            ->with('success', 'Invoice email sent successfully!');
     }
 }
