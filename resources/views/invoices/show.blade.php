@@ -3,26 +3,47 @@
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800">Invoice {{ $invoice->invoice_number }}</h2>
             <div class="flex gap-2">
-                <a href="{{ route('invoices.pdf', $invoice->id) }}" target="_blank"
+                {{-- <a href="{{ route('invoices.pdf', $invoice->id) }}" target="_blank"
                     class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700">
                     Download PDF
-                </a>
+                </a> --}}
                 <a href="{{ route('invoices.edit', $invoice->id) }}"
                     class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">
                     Edit
                 </a>
                 {{-- email send --}}
                 <a href="{{ route('invoices.send.email', $invoice->id) }}"
-                    class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-purple-700">
-                    Send Email
+                    class="">
+                
+                      <button type="submit" onclick="return confirm('Send invoice to {{ $invoice->client->email }}?')"
+                        class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        Send Invoice Email
+                    </button>
                 </a>
+
                 {{-- payment tab --}}
-                @if ($invoice->status !== 'paid')
+                {{-- @if ($invoice->status !== 'paid')
                     <a href="{{ route('invoices.checkout', $invoice->id) }}"
                         class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700">
                         Pay Now
                     </a>
-                @endif
+                @endif --}}
+                {{-- resources/views/invoices/show.blade.php mein --}}
+                {{-- <form action="{{ route('invoices.send-email', $invoice) }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" onclick="return confirm('Send invoice to {{ $invoice->client->email }}?')"
+                        class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        Send Invoice Email
+                    </button>
+                </form> --}}
                 <a href="{{ route('invoices.index') }}"
                     class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-200">
                     Back
@@ -73,7 +94,7 @@
                             <span class="text-sm">{{ $invoice->notes }}</span>
                         </div>
                         {{-- transaction id show --}}
-                        @if ($invoice->payment)
+                        {{-- @if ($invoice->payment)
                             <div class="flex justify-between border-b pb-2">
                                 <span class="text-sm text-gray-500">Transaction ID</span>
 
@@ -81,7 +102,7 @@
                                     {{ $invoice->payment->transaction_id }}
                                 </span>
                             </div>
-                        @endif
+                        @endif --}}
                     </div>
                 </div>
             </div>
@@ -111,25 +132,6 @@
                 </table>
 
                 <!-- Summary -->
-                {{-- <div class="p-4 space-y-2 border-t">
-                    <div class="flex justify-between text-sm">
-                        <span class="text-gray-500">Subtotal</span>
-                        <span>₹{{ number_format($invoice->subtotal, 2) }}</span>
-                    </div>
-                    <div class="flex justify-between text-sm">
-                        <span class="text-gray-500">Tax ({{ $invoice->tax }}%)</span>
-                        <span>₹{{ number_format(($invoice->subtotal * $invoice->tax) / 100, 2) }}</span>
-                    </div>
-                    <div class="flex justify-between text-sm">
-                        <span class="text-gray-500">Discount</span>
-                        <span>-₹{{ number_format($invoice->discount, 2) }}</span>
-                    </div>
-                    <div class="flex justify-between font-bold text-base border-t pt-2">
-                        <span>Total</span>
-                        <span class="text-green-600">₹{{ number_format($invoice->total, 2) }}</span>
-                    </div>
-                </div> --}}
-                <!-- Summary -->
                 <div class="p-4 space-y-2 border-t">
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-500">Subtotal</span>
@@ -158,7 +160,7 @@
                     </div>
                 </div>
 
-                @if ($invoice->payment)
+                {{-- @if ($invoice->payment)
                     <div class="border-t p-4 bg-gray-50">
 
                         <h3 class="text-sm font-semibold text-gray-500 uppercase mb-4">
@@ -202,7 +204,7 @@
                         </div>
 
                     </div>
-                @endif
+                @endif --}}
 
 
             </div>

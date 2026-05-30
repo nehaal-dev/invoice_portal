@@ -14,6 +14,7 @@ use App\Models\Payment;
 
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InvoiceMail;
+use App\Mail\PaymentConfirmationMail;
 
 
 class InvoiceController extends Controller
@@ -158,6 +159,19 @@ class InvoiceController extends Controller
     }
 
 
+    public function sendEmail(Invoice $invoice)
+    {
+        Mail::to($invoice->client->email)
+            ->send(new InvoiceMail($invoice));
+
+        return redirect()
+            ->route('invoices.show', $invoice->id)
+            ->with('success', 'Invoice email sent successfully!');
+    }
+
+
+
+
 
     public function checkout(Invoice $invoice)
     {
@@ -212,6 +226,7 @@ class InvoiceController extends Controller
                 $invoice->update([
                     'status' => 'paid'
                 ]);
+                Mail::to($invoice->client->email)->send(new PaymentConfirmationMail($invoice));
             }
 
             return redirect()
@@ -222,16 +237,5 @@ class InvoiceController extends Controller
         return redirect()
             ->route('invoices.show', $invoice->id)
             ->with('error', 'Payment failed!');
-    }
-
-
-    public function sendEmail(Invoice $invoice)
-    {
-        Mail::to($invoice->client->email)
-            ->send(new InvoiceMail($invoice));
-
-        return redirect()
-            ->route('invoices.show', $invoice->id)
-            ->with('success', 'Invoice email sent successfully!');
     }
 }

@@ -94,9 +94,25 @@
                 {{ $clint->email }}<br>
                 {{ $clint->city }}, {{ $clint->country }}
             </td>
-            <td style="text-align: right;">
-                <strong>Due Date:</strong> {{ $invoice->due_date }}
+            <td style="text-align:right; padding-right:15px;">
+
+                <div style="margin-bottom:8px;">
+                    <strong>Due Date:</strong>
+                    {{ $invoice->due_date }}
+                </div>
+            
+                <div>
+                    <strong>Status:</strong>
+            
+                    <span style="color:#dc2626; padding-right:25px;">
+                        {{ ucfirst($invoice->status) }}
+                    </span>
+                </div>
+            
             </td>
+            {{-- <td style="text-align: right;">
+                <strong>Status:</strong> {{ $invoice->status }}
+            </td> --}}
         </tr>
     </table>
 
@@ -135,7 +151,7 @@
             <td>{{ $invoice->total }}</td>
         </tr>
 
-        @if ($invoice->payment)
+        {{-- @if ($invoice->payment)
             <tr>
                 <td colspan="4" style="padding-top:20px;">
                     <hr>
@@ -181,7 +197,7 @@
                     {{ $invoice->payment->payment_date }}
                 </td>
             </tr>
-        @endif
+        @endif --}}
     </table>
 
     <!-- Notes -->
