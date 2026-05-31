@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,8 +29,22 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // check role 
+        if (auth()->user()->role  === 'client') {
+            return redirect()->route('portal.index');
+        }
+        
         return redirect()->intended(route('dashboard', absolute: false));
     }
+
+
+
+
+
+
+
+
+
 
     /**
      * Destroy an authenticated session.

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +26,7 @@
             background: #ffffff;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
         }
 
         .header {
@@ -149,105 +150,116 @@
 
 <body>
 
-<div class="wrapper">
+    <div class="wrapper">
 
-    <div class="header">
-        <h1>{{ config('app.name') }}</h1>
-        <p>Invoice Notification</p>
-    </div>
-
-    <div class="body">
-
-        <p class="greeting">
-            Hello <strong>{{ $invoice->client->client_name }}</strong>,
-        </p>
-
-        <p class="content">
-            Your invoice
-            <strong>{{ $invoice->invoice_number }}</strong>
-            has been generated successfully.
-            Please review the details below.
-        </p>
-
-        <div class="invoice-box">
-            <table>
-
-                <tr>
-                    <td style="color:#6b7280;">Invoice Number</td>
-                    <td>{{ $invoice->invoice_number }}</td>
-                </tr>
-
-                <tr>
-                    <td style="color:#6b7280;">Invoice Date</td>
-                    <td>
-                        {{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M Y') }}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td style="color:#6b7280;">Due Date</td>
-                    <td>
-                        {{ \Carbon\Carbon::parse($invoice->due_date)->format('d M Y') }}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td style="color:#6b7280;">Status</td>
-                    <td>
-                        <span class="status-badge status-{{ $invoice->status }}">
-                            {{ ucfirst($invoice->status) }}
-                        </span>
-                    </td>
-                </tr>
-
-                <tr class="total-row">
-                    <td>Total Amount</td>
-                    <td>₹{{ number_format($invoice->total, 2) }}</td>
-                </tr>
-
-            </table>
+        <div class="header">
+            <h1>{{ config('app.name') }}</h1>
+            <p>Invoice Notification</p>
         </div>
 
-        @if($invoice->notes)
-            <p class="content">
-                <strong>Notes:</strong>
-                {{ $invoice->notes }}
+        <div class="body">
+
+            <p class="greeting">
+                Hello <strong>{{ $invoice->client->client_name }}</strong>,
             </p>
-        @endif
 
-        <p class="content">
-            Please find your invoice PDF attached with this email.
-        </p>
+            <p class="content">
+                Your invoice
+                <strong>{{ $invoice->invoice_number }}</strong>
+                has been generated successfully.
+                Please review the details below.
+            </p>
 
-        @if($invoice->status !== 'paid')
-            <a href="{{ route('invoices.checkout', $invoice->id) }}"
-               class="cta-btn">
-                Pay Now
-            </a>
-        @endif
+            <div class="invoice-box">
+                <table>
 
-        <hr class="divider">
+                    <tr>
+                        <td style="color:#6b7280;">Invoice Number</td>
+                        <td>{{ $invoice->invoice_number }}</td>
+                    </tr>
 
-        <p class="content">
-            If you have any questions regarding this invoice,
-            please contact us.
-        </p>
+                    <tr>
+                        <td style="color:#6b7280;">Invoice Date</td>
+                        <td>
+                            {{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M Y') }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="color:#6b7280;">Due Date</td>
+                        <td>
+                            {{ \Carbon\Carbon::parse($invoice->due_date)->format('d M Y') }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="color:#6b7280;">Status</td>
+                        <td>
+                            <span class="status-badge status-{{ $invoice->status }}">
+                                {{ ucfirst($invoice->status) }}
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr class="total-row">
+                        <td>Total Amount</td>
+                        <td>₹{{ number_format($invoice->total, 2) }}</td>
+                    </tr>
+
+                </table>
+            </div>
+
+            @if ($invoice->notes)
+                <p class="content">
+                    <strong>Notes:</strong>
+                    {{ $invoice->notes }}
+                </p>
+            @endif
+
+            <p class="content">
+                Please find your invoice PDF attached with this email.
+            </p>
+
+            @if ($invoice->status !== 'paid')
+                <a href="{{ route('invoices.checkout', $invoice->id) }}" class="cta-btn">
+                    Pay Now
+                </a>
+            @endif
+
+            <p class="content" style="margin-top: 15px;">
+                <strong>Portal Access:</strong><br>
+                Login to view all your invoices:<br>
+                Email: {{ $invoice->client->email }}<br>
+                Password: client123
+                <br>
+                <a href="{{ config('app.url') }}/login" class="cta-btn" style="margin-top:10px;">
+                    View Portal
+                </a>
+            </p>
+
+            <hr class="divider">
+
+            <p class="content">
+                If you have any questions regarding this invoice,
+                please contact us.
+            </p>
+
+        </div>
+
+        <div class="footer">
+            <p>
+                © {{ date('Y') }} {{ config('app.name') }}.
+                All rights reserved.
+            </p>
+
+            <p style="margin-top:8px;">
+                This email was sent to
+                <strong>{{ $invoice->client->email }}</strong>
+            </p>
+        </div>
 
     </div>
-
-    <div class="footer">
-        <p>
-            © {{ date('Y') }} {{ config('app.name') }}.
-            All rights reserved.
-        </p>
-
-        <p style="margin-top:8px;">
-            This email was sent to
-            <strong>{{ $invoice->client->email }}</strong>
-        </p>
-    </div>
-
-</div>
 
 </body>
+
 </html>

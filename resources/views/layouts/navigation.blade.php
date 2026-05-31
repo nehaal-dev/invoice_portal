@@ -23,6 +23,11 @@
                     <x-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')">
                         {{ __('Invoices') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('subscription.index')" :active="request()->routeIs('subscription.*')">
+                        {{ __('Subscription') }}
+                    </x-nav-link>
+                    
                 </div>
             </div>
 
@@ -86,6 +91,8 @@
             <x-responsive-nav-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')">
                 {{ __('Invoices') }}
             </x-responsive-nav-link>
+
+            
         </div>
 
         <!-- Responsive Settings Options -->

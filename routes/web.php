@@ -7,6 +7,8 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Redirect;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\AiController;
 
 Route::get('/', function () {
    
@@ -54,4 +56,22 @@ Route::get('/invoices/{invoice}/payment-success', [InvoiceController::class, 'pa
 
 Route::get('/invoices/{invoice}/send-email',[InvoiceController::class, 'sendEmail'])->name('invoices.send.email');
 
+
+Route::get('/subscription', [SubscriptionController::class, 'index'])->name('subscription.index');
+Route::get('/subscription/checkout', [SubscriptionController::class, 'checkout'])->name('subscription.checkout');
+Route::get('/subscription/success', [SubscriptionController::class, 'success'])->name('subscription.success');
+
+Route::get('/invoices/create', [InvoiceController::class, 'create']) ->middleware('check.subscription') ->name('invoices.create');
+
+//AI Integration 
+Route::post('/ai/generate-description', [AiController::class, 'generateDescription'])->name('ai.generate');
+
+Route::middleware(['auth' , 'client'])->group(function(){
+    Route::get('/portal' , [ClientController::class , 'index'] )->name('portal.index');
+    Route::get('/portal/invoices/{invoice}', [ClientController::class , 'show'])->name('portal.show');
+});
+
+
 require __DIR__ . '/auth.php';
+
+

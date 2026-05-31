@@ -12,8 +12,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->statefulApi();
+        $middleware->alias([
+            'check.subscription' => \App\Http\Middleware\CheckSubscription::class,
+            'client' => \App\Http\Middleware\ClientMiddleware::class
+        ]);
+        
     })
+    
+
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
+
+    

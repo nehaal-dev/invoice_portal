@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use App\Models\Subscription;
 
 class RegisteredUserController extends Controller
 {
@@ -41,6 +42,18 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // //create free user subscription
+        // Subscription::create([
+        //     'user_id'    => $user->id,
+        //     'plan_name'  => 'free',
+        //     'status'     => 'active',
+        //     'amount'     => 0,
+        //     'start_at'   => now(),
+        //     'expires_at' => null,
+        // ]);
+
+
 
         event(new Registered($user));
 
