@@ -48,7 +48,7 @@ class SubscriptionController extends Controller
                     'plan_name'  => 'pro',
                     'status'     => 'active',
                     'amount'     => 999,
-                    'starts_at'  => now(),
+                    'start_at'  => now(),
                     'expires_at' => now()->addMonth(),
                 ]
             );

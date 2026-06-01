@@ -16,19 +16,22 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+
+
+<body class="font-sans antialiased bg-gradient-to-br from-slate-50 via-white to-indigo-50">
+    <div class="min-h-screen">
         @include('layouts.navigation')
 
-        <!-- Page Heading -->
+        <!-- Page Heading -->  
         @isset($header)
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        
+                <header class="bg-white/80 backdrop-blur-md border-b border-gray-200">
+                    <div class="max-w-7xl mx-auto py-8 px-6 lg:px-8">
                     {{ $header }}
                 </div>
             </header>
         @endisset
-{{-- flash message  --}}
+        {{-- flash message  --}}
         @if (session('success'))
             <div class="max-w-7xl mx-auto mt-4 px-4">
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">

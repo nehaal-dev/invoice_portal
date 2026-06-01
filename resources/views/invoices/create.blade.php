@@ -79,10 +79,7 @@
                                 <input type="number" name="price[]" placeholder="Price"
                                     class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
 
-                                    <button type="button" onclick="generateDescription(this)"
-                                    class="bg-red-600 text-white px-1 py-1 rounded-sm text-lg hover:bg-purple-700">
-                                    AI ✨
-                                </button>
+                               
 
                             </div>
                         </div>
@@ -97,7 +94,7 @@
                             class="bg-blue-600 text-white px-6 py-2 rounded-lg text-sm hover:bg-blue-700">
                             Save Invoice
                         </button>
-                       
+
                         <a href="{{ route('invoices.index') }}"
                             class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg text-sm hover:bg-gray-200">
                             Cancel
@@ -125,34 +122,8 @@
             container.appendChild(newRow);
         });
 
-         //AI iNTEGRATION 
-        function generateDescription(btn) {
-            const row = btn.closest('.item-row');
-            const itemName = row.querySelector('input[name="item_name[]"]').value;
-
-            if (!itemName) {
-                alert('Please enter item name first');
-                return;
-            }
-
-            btn.textContent = 'Loading...';
-
-            fetch('{{ route('ai.generate') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({
-                        item_name: itemName
-                    })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    row.querySelector('input[name="item_name[]"]').value = data.description;
-                    btn.textContent = 'AI ✨';
-                });
-        }
+    
+       
     </script>
 
 </x-app-layout>

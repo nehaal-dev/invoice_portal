@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
-use Illuminate\Http\Request;
+
 
 class ClientPortalController extends Controller
 {

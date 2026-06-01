@@ -232,7 +232,7 @@
                 Email: {{ $invoice->client->email }}<br>
                 Password: client123
                 <br>
-                <a href="{{ config('app.url') }}/login" class="cta-btn" style="margin-top:10px;">
+                <a href="{{ url('/login') }}" class="cta-btn" style="margin-top:10px;">
                     View Portal
                 </a>
             </p>

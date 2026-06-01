@@ -30,34 +30,35 @@ class ClientController extends Controller
       $req->validate([
 
          'client_name' => 'required|string|max:200',
-         'email' => 'nullable|email',
+         // 'email' => 'nullable|email',
          'phone' => 'required|string|max:20',
          'client_address' => 'required|string|max:250',
          'city' => 'required|string',
          'country' => 'required|string'
 
       ]);
-
-      Client::create([
-
-         'user_id'  => auth()->id(),
+      $client = Client::create([
+         'user_id'     => auth()->id(),
          'client_name' => $req->client_name,
-         'email' => $req->email,
-         'phone' => $req->phone,
-         'address' => $req->client_address,
-         'city' => $req->city,
-         'country' => $req->country
+         'email'       => $req->email,
+         'phone'       => $req->phone,
+         'address'     => $req->client_address,
+         'city'        => $req->city,
+         'country'     => $req->country
       ]);
-      // Client create hone ke baad — portal user bhi banao
-      $portalUser = \App\Models\User::create([
-         'name'      => $req->client_name,
-         'email'     => $req->email,
-         'password'  => bcrypt('client123'), // default password
-         'role'      => 'client',
-         'client_id' => $client->id,
-      ]);
+
+      if ($req->email) {
+         \App\Models\User::create([
+            'name'      => $req->client_name,
+            'email'     => $req->email,
+            'password'  => bcrypt('client123'),
+            'role'      => 'client',
+            'client_id' => $client->id,
+         ]);
+      }
 
       return redirect()->route('clients.index');
+    
    }
 
    public function show(Client $client)
