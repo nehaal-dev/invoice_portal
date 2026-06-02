@@ -18,19 +18,21 @@ Route::get('/', function () {
 });
 
  
-
+//Dashboard route
 Route::get('/dashboard' , [DashboardController::class , 'index'])
-->middleware(['auth' ,'verified'])
+->middleware(['auth' ,'verified' , 'owner'])
 ->name('dashboard') ;
 
-
-
-Route::middleware('auth')->group(function () {
+//Profile Route
+Route::middleware('auth')->group(function(){
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-//Clients
+
+Route::middleware(['auth','owner' ])->group(function () {
+       //Clients
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
     Route::get('/clients/create', [ClientController::class, 'create'])->name('clients.create');
     Route::post('/clients', [ClientController::class, 'store'])->name('clients.store');
@@ -65,12 +67,10 @@ Route::get('/subscription/success', [SubscriptionController::class, 'success'])-
 Route::get('/invoices/create', [InvoiceController::class, 'create']) ->middleware('check.subscription') ->name('invoices.create');
 
  
-
-Route::middleware(['auth' , 'client'])->group(function () {
-
-    Route::get('/portal', [ClientPortalController::class, 'index'] )->name('portal.index');
-
+Route::middleware(['auth','client'])->group(function () {
+    Route::get('/portal', [ClientPortalController::class, 'index'])->name('portal.index');
     Route::get('/portal/invoices/{invoice}', [ClientPortalController::class, 'show'])->name('portal.show');
+    Route::get('/portal/invoices/{invoice}/pdf',[ClientPortalController::class, 'downloadPdf']) ->name('portal.pdf');
 
 });
 require __DIR__ . '/auth.php';

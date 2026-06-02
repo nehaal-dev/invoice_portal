@@ -230,7 +230,8 @@
                 <strong>Portal Access:</strong><br>
                 Login to view all your invoices:<br>
                 Email: {{ $invoice->client->email }}<br>
-                Password: client123
+                Temporary Password: client123
+                For security, please change your password after first login.
                 <br>
                 <a href="{{ url('/login') }}" class="cta-btn" style="margin-top:10px;">
                     View Portal

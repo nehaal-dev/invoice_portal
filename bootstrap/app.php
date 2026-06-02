@@ -15,7 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->statefulApi();
         $middleware->alias([
             'check.subscription' => \App\Http\Middleware\CheckSubscription::class,
-            'client' => \App\Http\Middleware\ClientMiddleware::class
+            'client' => \App\Http\Middleware\ClientMiddleware::class,
+            'owner' => \App\Http\Middleware\OwnerMiddleware::class
         ]);
         
     })
