@@ -53,6 +53,12 @@ A SaaS-based Invoice Management System built with Laravel 11. Business owners ca
  
 <img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/1e14dc70-1ea6-4121-ac1b-815d5a99b4dd" />
 
+### Client Portal Dashboard
+Client Loged in 
+<img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/c5aab744-d30b-4d89-b9d0-d8eddc5157a7" />
+
+
+
 
 ### Invoice List (with Search & Filter)
  
