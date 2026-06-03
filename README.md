@@ -56,6 +56,8 @@ A SaaS-based Invoice Management System built with Laravel 11. Business owners ca
 
 ### Invoice List (with Search & Filter)
 ![Invoices](screenshots/invoices.png)
+<img width="1442" height="724" alt="Screenshot 2026-06-03 at 4 07 44 PM" src="https://github.com/user-attachments/assets/e093cf6a-1930-4625-bf0b-4ab8f7f23c20" />
+
 
 ### Invoice Detail
 ![Invoice Detail](screenshots/invoice-detail.png)
