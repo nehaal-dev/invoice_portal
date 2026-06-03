@@ -6,8 +6,8 @@ A SaaS-based Invoice Management System built with Laravel 11. Business owners ca
 **[https://web-production-15ad2e.up.railway.app](https://web-production-15ad2e.up.railway.app)**
 
 > ⚠️ Demo credentials — please do not change password:
-> -User Email: `nehalkhan4639@gmail.com`
-> - Password: `Khan4639`
+> -  User Email: `nehalkhan4639@gmail.com`
+> -  Password: `Khan4639`
 
 ---
 
