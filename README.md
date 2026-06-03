@@ -61,12 +61,21 @@ A SaaS-based Invoice Management System built with Laravel 11. Business owners ca
 
 ### Invoice Detail
 ![Invoice Detail](screenshots/invoice-detail.png)
+<img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/c29becf1-e6a8-4aee-9a42-e9c71d5c69d8" />
+<img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/7b693db8-9c3d-40f3-b1d0-a25d6585ffc1" />
+
+
 
 ### PDF Invoice
 ![PDF](screenshots/pdf.png)
+<img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/b07498c6-af96-49e4-a3ee-efdf0ed7d104" />
+<img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/9582a2fa-34b7-4eb8-a043-6156cbe245dc" />
+
+
 
 ### Stripe Payment
 ![Payment](screenshots/payment.png)
+
 
 ---
 
