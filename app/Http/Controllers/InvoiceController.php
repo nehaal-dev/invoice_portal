@@ -163,8 +163,7 @@ class InvoiceController extends Controller
 
 
 
-    public function downloadPdf(Invoice $invoice)
-    {
+    public function downloadPdf(Invoice $invoice){
         $invoice->load('payment');
 
         $items = InvoiceItem::where('invoice_id', $invoice->id)->get();
@@ -174,23 +173,20 @@ class InvoiceController extends Controller
         // return $pdf->stream('Invoice-' . $invoice->invoice_number . '.pdf'); for testing in browser use stream()
     }
 
+    public function sendEmail(Invoice $invoice){
+    Mail::to($invoice->client->email)
+        ->queue(new InvoiceMail($invoice));
 
-    public function sendEmail(Invoice $invoice)
-    {
-        Mail::to($invoice->client->email)
-            ->send(new InvoiceMail($invoice));
-
-        return redirect()
-            ->route('invoices.show', $invoice->id)
-            ->with('success', 'Invoice email sent successfully!');
-    }
+    return redirect()
+        ->route('invoices.show', $invoice->id)
+        ->with('success', 'Invoice email queued successfully!');
+}
 
 
 
 
 
-    public function checkout(Invoice $invoice)
-    {
+    public function checkout(Invoice $invoice){
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $session = Session::create([
@@ -214,8 +210,7 @@ class InvoiceController extends Controller
     }
 
 
-    public function paymentSuccess(Invoice $invoice, Request $request)
-    {
+    public function paymentSuccess(Invoice $invoice, Request $request){
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $session = Session::retrieve($request->session_id);
