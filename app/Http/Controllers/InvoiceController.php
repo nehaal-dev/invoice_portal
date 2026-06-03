@@ -20,9 +20,25 @@ use App\Mail\PaymentConfirmationMail;
 class InvoiceController extends Controller
 {
 
-    public function index()
+    // public function index()
+    // {
+    //     $invoices = Invoice::where('user_id', auth()->id())->get();
+    //     return view('invoices.index', compact('invoices'));
+    // }
+    public function index(Request $request)
     {
-        $invoices = Invoice::where('user_id', auth()->id())->get();
+        $invoices = Invoice::where('user_id', auth()->id())
+            ->when($request->search, function ($q) use ($request) {
+                $q->where('invoice_number', 'like', '%' . $request->search . '%')
+                    ->orWhereHas('client', function ($q) use ($request) {
+                        $q->where('client_name', 'like', '%' . $request->search . '%');
+                    });
+            })
+            ->when($request->status, function ($q) use ($request) {
+                $q->where('status', $request->status);
+            })
+            ->get();
+
         return view('invoices.index', compact('invoices'));
     }
 
