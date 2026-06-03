@@ -6,7 +6,7 @@ A SaaS-based Invoice Management System built with Laravel 11. Business owners ca
 **[https://web-production-15ad2e.up.railway.app](https://web-production-15ad2e.up.railway.app)**
 
 > ⚠️ Demo credentials — please do not change password:
-> - Email: `nehalkhan4639@gmail.com`
+> -User Email: `nehalkhan4639@gmail.com`
 > - Password: `Khan4639`
 
 ---
@@ -50,24 +50,24 @@ A SaaS-based Invoice Management System built with Laravel 11. Business owners ca
 ## 📸 Screenshots
 
 ### Dashboard
-![Dashboard](screenshots/dashboard.png)
+ 
 <img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/1e14dc70-1ea6-4121-ac1b-815d5a99b4dd" />
 
 
 ### Invoice List (with Search & Filter)
-![Invoices](screenshots/invoices.png)
+ 
 <img width="1442" height="724" alt="Screenshot 2026-06-03 at 4 07 44 PM" src="https://github.com/user-attachments/assets/e093cf6a-1930-4625-bf0b-4ab8f7f23c20" />
 
 
 ### Invoice Detail
-![Invoice Detail](screenshots/invoice-detail.png)
+ 
 <img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/c29becf1-e6a8-4aee-9a42-e9c71d5c69d8" />
 <img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/7b693db8-9c3d-40f3-b1d0-a25d6585ffc1" />
 
 
 
 ### PDF Invoice
-![PDF](screenshots/pdf.png)
+ 
 <img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/b07498c6-af96-49e4-a3ee-efdf0ed7d104" />
 <img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/9582a2fa-34b7-4eb8-a043-6156cbe245dc" />
 
