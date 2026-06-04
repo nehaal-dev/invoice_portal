@@ -175,11 +175,15 @@ class InvoiceController extends Controller
 
     public function sendEmail(Invoice $invoice){
     Mail::to($invoice->client->email)
-        ->queue(new InvoiceMail($invoice));
+        //->queue(new InvoiceMail($invoice));
+        ->send(new InvoiceMail($invoice));
 
     return redirect()
         ->route('invoices.show', $invoice->id)
         ->with('success', 'Invoice email queued successfully!');
+
+        Mail::to($invoice->client->email)
+   
 }
 
 
