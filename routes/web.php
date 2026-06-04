@@ -73,6 +73,13 @@ Route::middleware(['auth','client'])->group(function () {
     Route::get('/portal/invoices/{invoice}/pdf',[ClientPortalController::class, 'downloadPdf']) ->name('portal.pdf');
 
 });
+
+Route::get('/debug-queue', function () {
+    return [
+        'queue' => config('queue.default'),
+        'mail_mailer' => config('mail.default'),
+    ];
+});
 require __DIR__ . '/auth.php';
 
 
