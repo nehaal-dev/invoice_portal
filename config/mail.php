@@ -34,6 +34,9 @@ return [
     |            "failover", "roundrobin"
     |
     */
+    'mailtrap' => [
+        'transport' => 'mailtrap',
+    ],
 
     'mailers' => [
 

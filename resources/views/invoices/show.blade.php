@@ -1,12 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
+        {{-- <div class="flex justify-between items-center"> --}}
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
             <h2 class="font-semibold text-xl text-gray-800">Invoice {{ $invoice->invoice_number }}</h2>
-            <div class="flex gap-2">
-                {{-- <a href="{{ route('invoices.pdf', $invoice->id) }}" target="_blank"
-                    class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700">
-                    Download PDF
-                </a> --}}
+            {{-- <div class="flex gap-2"> --}}
+                <div class="flex flex-wrap gap-2">
+               
                 <a href="{{ route('invoices.edit', $invoice->id) }}"
                     class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">
                     Edit
@@ -24,26 +23,6 @@
                         Send Invoice Email
                     </button>
                 </a>
-
-                {{-- payment tab --}}
-                {{-- @if ($invoice->status !== 'paid')
-                    <a href="{{ route('invoices.checkout', $invoice->id) }}"
-                        class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700">
-                        Pay Now
-                    </a>
-                @endif --}}
-                {{-- resources/views/invoices/show.blade.php mein --}}
-                {{-- <form action="{{ route('invoices.send-email', $invoice) }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" onclick="return confirm('Send invoice to {{ $invoice->client->email }}?')"
-                        class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        Send Invoice Email
-                    </button>
-                </form> --}}
                 <a href="{{ route('invoices.index') }}"
                     class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-200">
                     Back
