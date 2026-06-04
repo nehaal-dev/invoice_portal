@@ -163,7 +163,8 @@ class InvoiceController extends Controller
 
 
 
-    public function downloadPdf(Invoice $invoice){
+    public function downloadPdf(Invoice $invoice)
+    {
         $invoice->load('payment');
 
         $items = InvoiceItem::where('invoice_id', $invoice->id)->get();
@@ -199,13 +200,13 @@ public function sendEmail(Invoice $invoice)
             'line' => $e->getLine(),
         ]);
     }
-    }
 }
 
 
 
 
-    public function checkout(Invoice $invoice){
+    public function checkout(Invoice $invoice)
+    {
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $session = Session::create([
@@ -229,7 +230,8 @@ public function sendEmail(Invoice $invoice)
     }
 
 
-    public function paymentSuccess(Invoice $invoice, Request $request){
+    public function paymentSuccess(Invoice $invoice, Request $request)
+    {
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $session = Session::retrieve($request->session_id);
