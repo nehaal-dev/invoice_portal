@@ -80,7 +80,7 @@ Client Loged in
 
 
 ### Stripe Payment
-![Payment](screenshots/payment.png)
+
 ![alt text](<Screenshot 2026-06-04 at 9.34.51 AM.png>)
 
 
