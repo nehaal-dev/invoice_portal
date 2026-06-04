@@ -173,19 +173,34 @@ class InvoiceController extends Controller
         // return $pdf->stream('Invoice-' . $invoice->invoice_number . '.pdf'); for testing in browser use stream()
     }
 
-    public function sendEmail(Invoice $invoice){
-    Mail::to($invoice->client->email)
-        //->queue(new InvoiceMail($invoice));
-        ->send(new InvoiceMail($invoice));
+//     public function sendEmail(Invoice $invoice){
+//     Mail::to($invoice->client->email)
+//         //->queue(new InvoiceMail($invoice));
+//         ->send(new InvoiceMail($invoice));
 
-    return redirect()
-        ->route('invoices.show', $invoice->id)
-        ->with('success', 'Invoice email queued successfully!');
+//     return redirect()
+//         ->route('invoices.show', $invoice->id)
+//         ->with('success', 'Invoice email queued successfully!');
 
+//         Mail::to($invoice->client->email)  
+// }
+
+public function sendEmail(Invoice $invoice)
+{
+    try {
         Mail::to($invoice->client->email)
-   
-}
+            ->send(new InvoiceMail($invoice));
 
+        return "MAIL SENT";
+    } catch (\Throwable $e) {
+        return response()->json([
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ]);
+    }
+    }
+}
 
 
 
