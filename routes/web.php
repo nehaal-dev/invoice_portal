@@ -8,8 +8,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\AiController;
-
 use App\Http\Controllers\ClientPortalController;
 
 Route::get('/', function () {

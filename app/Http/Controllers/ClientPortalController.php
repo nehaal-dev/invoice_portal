@@ -51,3 +51,19 @@ class ClientPortalController extends Controller
         return $pdf->download('Invoice-' . $invoice->invoice_number . '.pdf');
     }
 }
+
+$exist=Invoice::where('name' , $req->name)->find();
+
+if($exist){
+    return back()->with('error' , 'Category name already exist');
+ 
+}
+
+$exist=Invoice::where('name', $req->name)->find()
+->orwhere('email', $req->email)
+->orWhere('phone', $req->phone)
+->exist() ;
+
+if($exist){
+    return back()->with('error' , 'All fields already entered');
+}

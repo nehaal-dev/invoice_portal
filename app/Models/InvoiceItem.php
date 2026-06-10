@@ -26,3 +26,5 @@ class InvoiceItem extends Model
 
 
 }
+
+ 
