@@ -149,7 +149,7 @@ class InvoiceController extends Controller
     }
 
     public function checkout(Invoice $invoice)
-    {
+   {
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $session = Session::create([
