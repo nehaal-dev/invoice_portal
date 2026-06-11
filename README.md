@@ -83,6 +83,8 @@ Client Loged in
 
 ![alt text](<Screenshot 2026-06-04 at 9.34.51 AM.png>)
 
+###  Payment Confirmation Mail Sent to Client 
+<img width="1470" height="802" alt="Screenshot 2026-06-11 at 12 50 00 PM" src="https://github.com/user-attachments/assets/3f6e28d8-2180-461c-b473-10f6225f68bf" />
 
 ---
 
